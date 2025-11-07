@@ -1,0 +1,11 @@
+# AI Image Text Editor - FREE Version Requirements
+# All packages are FREE and open-source
+
+flask==3.0.0
+pillow==10.1.0
+requests==2.31.0
+python-dotenv==1.0.0
+huggingface-hub>=0.20.0  # For new HF API
+
+# Optional: Only if you want Claude Vision (costs $5 free credit)
+# anthropic==0.25.0
