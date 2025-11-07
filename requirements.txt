@@ -1,18 +1,15 @@
-# AI Image Text Editor - FREE Version Requirements
-# All packages are FREE and open-source
+# AI Image Text Editor - Full Requirements
+# For Render.com deployment with OCR support
 
 flask==3.0.0
 pillow==10.1.0
 requests==2.31.0
-python-dotenv==1.0.0
-huggingface-hub>=0.20.0
 gunicorn==20.1.0
 
-# NOTE: The original app uses EasyOCR, numpy and OpenCV which can be large
-# and require additional system packages. If you want OCR functionality
-# in the container, add these (and ensure the base image installs system
-# deps like libgl1, tesseract, build-essential, etc):
-# easyocr
-# numpy
-# opencv-python-headless
-# torch
+# OCR and Image Processing
+easyocr==1.7.0
+numpy==1.24.3
+opencv-python-headless==4.8.1.78
+torch==2.0.1
+torchvision==0.15.2
+

@@ -86,18 +86,26 @@ http://localhost:5000
 
 ## 🌐 Deploy to Vercel
 
-This project is ready to deploy to Vercel using Docker!
+This project is ready to deploy to Vercel using Python serverless functions!
 
-### Option 1: Deploy via Vercel Dashboard (Recommended)
+### Quick Deploy (Recommended)
 
-1. Push this repository to GitHub
-2. Go to [Vercel Dashboard](https://vercel.com/dashboard)
-3. Click **"Add New Project"**
-4. Import your GitHub repository
-5. Vercel will auto-detect the `vercel.json` and use the Dockerfile
-6. Click **"Deploy"**
+1. **Push to GitHub** (if not already done)
+```bash
+git add .
+git commit -m "Ready for Vercel deployment"
+git push origin main
+```
 
-### Option 2: Deploy via Vercel CLI
+2. **Deploy via Vercel Dashboard**
+   - Go to [Vercel Dashboard](https://vercel.com/dashboard)
+   - Click **"Add New Project"**
+   - Import your GitHub repository: `Atulrkumar/Image_Editor`
+   - Vercel will auto-detect `vercel.json` and use Python runtime
+   - Click **"Deploy"**
+   - Your app will be live in ~2 minutes!
+
+### Deploy via Vercel CLI
 
 ```bash
 # Install Vercel CLI
@@ -110,33 +118,36 @@ vercel login
 vercel --prod
 ```
 
-### Important Notes for Vercel Deployment
+### ⚠️ Important Serverless Limitations
 
-⚠️ **File Storage**: Uploaded and generated images are stored in `/uploads` and `/generated` folders inside the container. These are **ephemeral** on serverless platforms - files will be lost on redeployment.
+Since Vercel uses serverless functions, some features are simplified:
 
-For production use, consider:
-- Integrating cloud storage (AWS S3, Cloudflare R2, Azure Blob)
-- Using a persistent file storage service
-- Storing images in a database (base64 encoded)
+- **No OCR**: EasyOCR and heavy ML packages don't work in serverless (they're too large)
+- **Manual Text Entry**: Users add text manually instead of auto-detection
+- **Ephemeral Storage**: Uploaded files don't persist (handled in memory)
+- **10-second Timeout**: Long AI operations may timeout (use Pollinations.ai for speed)
 
-⚠️ **OCR Dependencies**: The full OCR version (`app_free.py`) uses EasyOCR, OpenCV, and PyTorch which are large packages. The current `requirements.txt` includes only core packages for faster builds. To enable full OCR:
+**What Works:**
+✅ Image upload and preview  
+✅ Manual text editing with drag-and-drop  
+✅ AI background variations (Pollinations.ai)  
+✅ Meme caption suggestions  
+✅ Download edited images  
 
-1. Uncomment OCR packages in `requirements.txt`:
-```txt
-easyocr
-numpy
-opencv-python-headless
-torch
-```
+**What Doesn't Work in Serverless:**
+❌ Automatic OCR text extraction  
+❌ Persistent file storage  
+❌ Heavy image processing (OpenCV)  
 
-2. Update `Dockerfile` to install system dependencies:
-```dockerfile
-RUN apt-get update && apt-get install -y \
-    tesseract-ocr \
-    libgl1-mesa-glx \
-    libglib2.0-0 \
-    && rm -rf /var/lib/apt/lists/*
-```
+### Alternative: Deploy with Full OCR on Other Platforms
+
+For full OCR functionality, deploy to platforms that support long-running containers:
+- **Render.com** (Docker support, free tier)
+- **Railway.app** (Docker support, $5/month)
+- **Fly.io** (Docker support, generous free tier)
+- **Google Cloud Run** (Container support, pay-as-you-go)
+
+Use the `Dockerfile` in this repo for container-based deployments.
 
 ## 📁 Project Structure
 

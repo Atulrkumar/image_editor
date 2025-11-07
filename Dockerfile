@@ -3,12 +3,16 @@ FROM python:3.11-slim
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
-# Install small set of system deps. Add more if you enable OCR (tesseract/opencv/etc.)
+# Install system dependencies for OCR and image processing
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     libgl1 \
     libglib2.0-0 \
-    curl \
+    libsm6 \
+    libxext6 \
+    libxrender-dev \
+    libgomp1 \
+    wget \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
@@ -16,7 +20,7 @@ WORKDIR /app
 # Copy requirements and install
 COPY requirements.txt ./
 RUN pip install --upgrade pip
-RUN pip install -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy application
 COPY . /app
@@ -24,7 +28,9 @@ COPY . /app
 # Create writable directories used by the app
 RUN mkdir -p /app/uploads /app/generated
 
-EXPOSE 5000
+# Render uses PORT environment variable, default to 10000
+ENV PORT=10000
+EXPOSE ${PORT}
 
 # Use gunicorn to serve the Flask app
-CMD ["gunicorn", "app_free:app", "--bind", "0.0.0.0:5000", "--workers", "1", "--threads", "4"]
+CMD gunicorn app_free:app --bind 0.0.0.0:${PORT} --workers 1 --threads 4 --timeout 120

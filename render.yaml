@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: ai-image-editor
+    env: docker
+    plan: free
+    region: oregon
+    branch: main
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11
+      - key: PORT
+        value: 10000
+    # Auto-deploy on push
+    autoDeploy: true
