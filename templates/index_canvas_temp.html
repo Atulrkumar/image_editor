@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Image Text Editor - Interactive Canvas</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 100%);
+            color: white;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 30px;
+        }
+
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        /* Canvas Section */
+        .canvas-section {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .canvas-container {
+            position: relative;
+            width: 100%;
+            background: #000;
+            border-radius: 15px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        #canvas {
+            display: block;
+            width: 100%;
+            height: auto;
+            cursor: crosshair;
+        }
+
+        .canvas-controls {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Controls Panel */
+        .controls-panel {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .control-group {
+            margin-bottom: 25px;
+        }
+
+        .control-group h3 {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .control-group label {
+            display: block;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+
+        .control-group input[type="text"],
+        .control-group input[type="number"],
+        .control-group textarea {
+            width: 100%;
+            padding: 12px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: white;
+            font-size: 1rem;
+        }
+
+        .control-group input[type="color"] {
+            width: 100%;
+            height: 50px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .font-size-slider {
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .upload-area {
+            border: 2px dashed rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 20px;
+        }
+
+        .upload-area:hover {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .upload-area.dragover {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.2);
+        }
+
+        /* Variations Section */
+        .variations-section {
+            display: none;
+            margin-top: 30px;
+        }
+
+        .variations-section h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 2rem;
+        }
+
+        .variations-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .variation-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+        }
+
+        .variation-card img {
+            width: 100%;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        .loading-spinner {
+            display: none;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .loading-spinner.active {
+            display: block;
+        }
+
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.1);
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎨 AI Image Text Editor</h1>
+        <p class="subtitle">Upload image → Edit on canvas → Generate AI variations</p>
+
+        <!-- Upload Area -->
+        <div class="upload-area" id="uploadArea">
+            <p style="font-size: 1.2rem; margin-bottom: 10px;">📁 Click or drag image here</p>
+            <p style="color: rgba(255, 255, 255, 0.5);">Supports JPG, PNG (max 16MB)</p>
+            <input type="file" id="fileInput" accept="image/*" class="hidden">
+        </div>
+
+        <div class="main-layout" id="mainLayout" style="display: none;">
+            <!-- Canvas Section -->
+            <div class="canvas-section">
+                <div class="canvas-container">
+                    <canvas id="canvas"></canvas>
+                </div>
+                <div class="canvas-controls">
+                    <button class="btn btn-secondary" onclick="addText()">➕ Add Text</button>
+                    <button class="btn btn-secondary" onclick="deleteSelected()">🗑️ Delete Selected</button>
+                    <button class="btn btn-secondary" onclick="clearCanvas()">🔄 Reset</button>
+                </div>
+            </div>
+
+            <!-- Controls Panel -->
+            <div class="controls-panel">
+                <div class="control-group">
+                    <h3>📝 Text Settings</h3>
+                    <label>Text Content:</label>
+                    <input type="text" id="textContent" placeholder="Enter text..." oninput="updateSelectedText()">
+                    
+                    <label style="margin-top: 15px;">Font Size: <span id="fontSizeValue">48</span>px</label>
+                    <input type="range" id="fontSize" min="20" max="200" value="48" class="font-size-slider" oninput="updateFontSize()">
+                    
+                    <label style="margin-top: 15px;">Text Color:</label>
+                    <input type="color" id="textColor" value="#ffffff" onchange="updateTextColor()">
+                </div>
+
+                <div class="control-group">
+                    <h3>🎨 Background</h3>
+                    <label>Background Description:</label>
+                    <textarea id="backgroundPrompt" rows="3" placeholder="e.g., ocean waves, sunset sky, forest..."></textarea>
+                    
+                    <label style="margin-top: 15px;">Background Color:</label>
+                    <input type="color" id="bgColor" value="#000000" onchange="updateBgColor()">
+                </div>
+
+                <button class="btn btn-primary" style="width: 100%; margin-top: 20px;" onclick="generateVariations()">
+                    ✨ Generate AI Variations
+                </button>
+            </div>
+        </div>
+
+        <!-- Loading -->
+        <div class="loading-spinner" id="loading">
+            <div class="spinner"></div>
+            <p>Generating amazing variations... This may take up to 60 seconds.</p>
+        </div>
+
+        <!-- Variations Section -->
+        <div class="variations-section" id="variationsSection">
+            <h2>✨ Your AI Variations</h2>
+            <div class="variations-grid" id="variationsGrid"></div>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        let uploadedImage = null;
+        let textElements = [];
+        let selectedElement = null;
+        let isDragging = false;
+        let dragOffset = { x: 0, y: 0 };
+
+        // Initialize
+        document.getElementById('uploadArea').addEventListener('click', () => {
+            document.getElementById('fileInput').click();
+        });
+
+        document.getElementById('fileInput').addEventListener('change', handleFileSelect);
+
+        // Drag and drop
+        const uploadArea = document.getElementById('uploadArea');
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('dragover');
+        });
+
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.classList.remove('dragover');
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            const file = e.dataTransfer.files[0];
+            if (file && file.type.startsWith('image/')) {
+                loadImage(file);
+            }
+        });
+
+        function handleFileSelect(e) {
+            const file = e.target.files[0];
+            if (file) {
+                loadImage(file);
+            }
+        }
+
+        function loadImage(file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const img = new Image();
+                img.onload = () => {
+                    uploadedImage = img;
+                    
+                    // Set canvas size
+                    const maxWidth = 800;
+                    const scale = maxWidth / img.width;
+                    canvas.width = maxWidth;
+                    canvas.height = img.height * scale;
+                    
+                    // Show main layout
+                    document.getElementById('uploadArea').style.display = 'none';
+                    document.getElementById('mainLayout').style.display = 'grid';
+                    
+                    // Initial render
+                    renderCanvas();
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function renderCanvas() {
+            // Clear canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw background color
+            const bgColor = document.getElementById('bgColor').value;
+            ctx.fillStyle = bgColor;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw uploaded image
+            if (uploadedImage) {
+                ctx.drawImage(uploadedImage, 0, 0, canvas.width, canvas.height);
+            }
+            
+            // Draw text elements
+            textElements.forEach((element, index) => {
+                ctx.font = `${element.fontSize}px Arial`;
+                ctx.fillStyle = element.color;
+                ctx.fillText(element.text, element.x, element.y);
+                
+                // Highlight selected
+                if (selectedElement === index) {
+                    ctx.strokeStyle = '#667eea';
+                    ctx.lineWidth = 2;
+                    const metrics = ctx.measureText(element.text);
+                    ctx.strokeRect(element.x - 5, element.y - element.fontSize, metrics.width + 10, element.fontSize + 10);
+                }
+            });
+        }
+
+        function addText() {
+            const newText = {
+                text: 'New Text',
+                x: canvas.width / 2 - 50,
+                y: canvas.height / 2,
+                fontSize: 48,
+                color: '#ffffff'
+            };
+            textElements.push(newText);
+            selectedElement = textElements.length - 1;
+            updateControls();
+            renderCanvas();
+        }
+
+        function updateControls() {
+            if (selectedElement !== null && textElements[selectedElement]) {
+                const element = textElements[selectedElement];
+                document.getElementById('textContent').value = element.text;
+                document.getElementById('fontSize').value = element.fontSize;
+                document.getElementById('fontSizeValue').textContent = element.fontSize;
+                document.getElementById('textColor').value = element.color;
+            }
+        }
+
+        function updateSelectedText() {
+            if (selectedElement !== null && textElements[selectedElement]) {
+                textElements[selectedElement].text = document.getElementById('textContent').value;
+                renderCanvas();
+            }
+        }
+
+        function updateFontSize() {
+            const size = parseInt(document.getElementById('fontSize').value);
+            document.getElementById('fontSizeValue').textContent = size;
+            if (selectedElement !== null && textElements[selectedElement]) {
+                textElements[selectedElement].fontSize = size;
+                renderCanvas();
+            }
+        }
+
+        function updateTextColor() {
+            if (selectedElement !== null && textElements[selectedElement]) {
+                textElements[selectedElement].color = document.getElementById('textColor').value;
+                renderCanvas();
+            }
+        }
+
+        function updateBgColor() {
+            renderCanvas();
+        }
+
+        function deleteSelected() {
+            if (selectedElement !== null) {
+                textElements.splice(selectedElement, 1);
+                selectedElement = null;
+                document.getElementById('textContent').value = '';
+                renderCanvas();
+            }
+        }
+
+        function clearCanvas() {
+            textElements = [];
+            selectedElement = null;
+            document.getElementById('textContent').value = '';
+            renderCanvas();
+        }
+
+        // Canvas mouse events
+        canvas.addEventListener('mousedown', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            // Check if clicking on any text
+            for (let i = textElements.length - 1; i >= 0; i--) {
+                const element = textElements[i];
+                ctx.font = `${element.fontSize}px Arial`;
+                const metrics = ctx.measureText(element.text);
+                
+                if (x >= element.x && x <= element.x + metrics.width &&
+                    y >= element.y - element.fontSize && y <= element.y) {
+                    selectedElement = i;
+                    isDragging = true;
+                    dragOffset.x = x - element.x;
+                    dragOffset.y = y - element.y;
+                    updateControls();
+                    renderCanvas();
+                    return;
+                }
+            }
+            
+            selectedElement = null;
+            renderCanvas();
+        });
+
+        canvas.addEventListener('mousemove', (e) => {
+            if (isDragging && selectedElement !== null) {
+                const rect = canvas.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                textElements[selectedElement].x = x - dragOffset.x;
+                textElements[selectedElement].y = y - dragOffset.y;
+                renderCanvas();
+            }
+        });
+
+        canvas.addEventListener('mouseup', () => {
+            isDragging = false;
+        });
+
+        async function generateVariations() {
+            const backgroundPrompt = document.getElementById('backgroundPrompt').value;
+            
+            if (!uploadedImage && !backgroundPrompt) {
+                alert('Please upload an image or describe a background!');
+                return;
+            }
+            
+            // Get canvas as base64
+            const canvasData = canvas.toDataURL('image/png');
+            
+            document.getElementById('loading').classList.add('active');
+            
+            try {
+                const response = await fetch('/api/generate', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        preview_image: canvasData,
+                        background_prompt: backgroundPrompt,
+                        texts: textElements
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    displayVariations(data.variations);
+                } else {
+                    alert('Error: ' + (data.error || 'Unknown error'));
+                }
+            } catch (error) {
+                alert('Error: ' + error.message);
+            } finally {
+                document.getElementById('loading').classList.remove('active');
+            }
+        }
+
+        function displayVariations(variations) {
+            const grid = document.getElementById('variationsGrid');
+            grid.innerHTML = '';
+            
+            variations.forEach((variation) => {
+                const card = document.createElement('div');
+                card.className = 'variation-card';
+                
+                if (variation.error) {
+                    card.innerHTML = `
+                        <h4>Variation ${variation.id}</h4>
+                        <p style="color: rgba(255, 100, 100, 0.9); padding: 20px;">
+                            ${variation.error}
+                        </p>
+                    `;
+                } else {
+                    card.innerHTML = `
+                        <img src="${variation.image_data}" alt="Variation ${variation.id}">
+                        <h4>Variation ${variation.id}</h4>
+                        <button class="btn btn-primary" onclick="downloadImage('${variation.filename}')">
+                            💾 Download
+                        </button>
+                    `;
+                }
+                
+                grid.appendChild(card);
+            });
+            
+            document.getElementById('variationsSection').style.display = 'block';
+            document.getElementById('variationsSection').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function downloadImage(filename) {
+            window.location.href = `/api/download/${filename}`;
+        }
+    </script>
+</body>
+</html>

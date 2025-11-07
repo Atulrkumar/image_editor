@@ -1,0 +1,1430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Image Text Editor ✨</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #0a0a0f;
+            min-height: 100vh;
+            padding: 0;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Animated gradient background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, 
+                #667eea 0%, 
+                #764ba2 25%, 
+                #f093fb 50%, 
+                #4facfe 75%, 
+                #00f2fe 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            opacity: 0.12;
+            z-index: 0;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Floating particles */
+        .particles {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(102, 126, 234, 0.5);
+            border-radius: 50%;
+            animation: float linear infinite;
+        }
+
+        @keyframes float {
+            0% { 
+                transform: translateY(100vh) translateX(0) scale(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% { 
+                transform: translateY(-100vh) translateX(100px) scale(1);
+                opacity: 0;
+            }
+        }
+
+        .container {
+            max-width: 1800px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Header with glassmorphism */
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 80px 40px;
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(30px);
+            border-radius: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        .emoji-float {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            display: inline-block;
+            animation: bounceFloat 3s ease-in-out infinite;
+            filter: drop-shadow(0 0 20px rgba(102, 126, 234, 0.5));
+        }
+
+        @keyframes bounceFloat {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            25% { transform: translateY(-15px) rotate(-5deg); }
+            75% { transform: translateY(-15px) rotate(5deg); }
+        }
+
+        .header h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 4.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 30%, #f093fb 60%, #4facfe 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 20px;
+            letter-spacing: -3px;
+            line-height: 1.1;
+            animation: gradientText 3s ease infinite;
+            background-size: 200% 200%;
+        }
+
+        @keyframes gradientText {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .header .subtitle {
+            font-size: 1.4rem;
+            color: rgba(255, 255, 255, 0.7);
+            font-weight: 300;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+        }
+
+        .free-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            padding: 8px 24px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3); }
+            50% { transform: scale(1.05); box-shadow: 0 6px 25px rgba(16, 185, 129, 0.5); }
+        }
+
+        /* Main content area */
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        /* Upload area with modern design */
+        .upload-section {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            border: 2px dashed rgba(102, 126, 234, 0.3);
+            padding: 60px;
+            text-align: center;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .upload-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(102, 126, 234, 0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .upload-section:hover {
+            border-color: rgba(102, 126, 234, 0.6);
+            background: rgba(255, 255, 255, 0.05);
+            transform: translateY(-5px);
+            box-shadow: 0 20px 60px rgba(102, 126, 234, 0.2);
+        }
+
+        .upload-icon {
+            font-size: 5rem;
+            margin-bottom: 30px;
+            animation: float 3s ease-in-out infinite;
+            position: relative;
+            z-index: 1;
+        }
+
+        .upload-section h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 15px;
+            font-weight: 700;
+            position: relative;
+            z-index: 1;
+        }
+
+        .upload-section p {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .file-input-wrapper {
+            position: relative;
+            display: inline-block;
+            z-index: 1;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        .custom-file-upload {
+            display: inline-block;
+            padding: 16px 40px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .custom-file-upload:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 30px rgba(102, 126, 234, 0.6);
+        }
+
+        /* Preview area */
+        .preview-area {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            min-height: 500px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .preview-placeholder {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .preview-placeholder img {
+            width: 200px;
+            opacity: 0.3;
+            margin-bottom: 20px;
+        }
+
+        #imagePreview {
+            max-width: 100%;
+            max-height: 600px;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            max-height: 800px;
+            overflow-y: auto;
+        }
+
+        .sidebar h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .text-element {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .text-element:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(102, 126, 234, 0.5);
+            transform: translateX(5px);
+        }
+
+        .text-element input,
+        .text-element textarea {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 12px 16px;
+            color: white;
+            font-size: 1rem;
+            margin-bottom: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .text-element input:focus,
+        .text-element textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+        }
+
+        .text-element label {
+            display: block;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.85rem;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+
+        /* Style prompt section */
+        .style-section {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .style-section h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        #stylePrompt {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 16px 20px;
+            color: white;
+            font-size: 1.1rem;
+            min-height: 100px;
+            resize: vertical;
+            transition: all 0.3s ease;
+        }
+
+        #stylePrompt:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+        }
+
+        .prompt-examples {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .prompt-tag {
+            background: rgba(102, 126, 234, 0.2);
+            color: rgba(255, 255, 255, 0.8);
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(102, 126, 234, 0.3);
+        }
+
+        .prompt-tag:hover {
+            background: rgba(102, 126, 234, 0.4);
+            border-color: rgba(102, 126, 234, 0.6);
+            transform: translateY(-2px);
+        }
+
+        /* Generate button */
+        .generate-btn {
+            width: 100%;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 16px;
+            font-size: 1.3rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 8px 30px rgba(102, 126, 234, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .generate-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .generate-btn:hover::before {
+            left: 100%;
+        }
+
+        .generate-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 40px rgba(102, 126, 234, 0.6);
+        }
+
+        .generate-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Variations gallery */
+        .variations-section {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 40px;
+        }
+
+        .variations-section h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 2rem;
+            margin-bottom: 30px;
+            font-weight: 700;
+            text-align: center;
+        }
+
+        .variations-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .variation-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+        }
+
+        .variation-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(102, 126, 234, 0.6);
+            box-shadow: 0 20px 60px rgba(102, 126, 234, 0.3);
+        }
+
+        .variation-card img {
+            width: 100%;
+            border-radius: 12px;
+            margin-bottom: 15px;
+        }
+
+        .variation-card h4 {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+        }
+
+        .download-btn {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .download-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 20px rgba(16, 185, 129, 0.4);
+        }
+
+        /* Loading spinner */
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .loading.active {
+            display: block;
+        }
+
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid rgba(102, 126, 234, 0.2);
+            border-top-color: #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading p {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 1.1rem;
+        }
+
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(102, 126, 234, 0.5);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(102, 126, 234, 0.7);
+        }
+
+        /* Responsive design */
+        @media (max-width: 1200px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 3rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .variations-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating particles -->
+    <div class="particles">
+        <div class="particle" style="left: 10%; animation-duration: 15s; animation-delay: 0s;"></div>
+        <div class="particle" style="left: 20%; animation-duration: 18s; animation-delay: 2s;"></div>
+        <div class="particle" style="left: 30%; animation-duration: 12s; animation-delay: 4s;"></div>
+        <div class="particle" style="left: 40%; animation-duration: 20s; animation-delay: 1s;"></div>
+        <div class="particle" style="left: 50%; animation-duration: 16s; animation-delay: 3s;"></div>
+        <div class="particle" style="left: 60%; animation-duration: 14s; animation-delay: 5s;"></div>
+        <div class="particle" style="left: 70%; animation-duration: 19s; animation-delay: 2s;"></div>
+        <div class="particle" style="left: 80%; animation-duration: 17s; animation-delay: 4s;"></div>
+        <div class="particle" style="left: 90%; animation-duration: 13s; animation-delay: 1s;"></div>
+    </div>
+
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="emoji-float">✨🎨🤖</div>
+            <h1>AI Image Text Editor</h1>
+            <p class="subtitle">Transform your images with intelligent text editing & AI-powered variations</p>
+            <div class="free-badge">100% FREE • No Credit Card Required</div>
+        </div>
+
+        <!-- Main content -->
+        <div class="main-content">
+            <!-- Left: Upload & Preview -->
+            <div>
+                <div class="upload-section" id="uploadZone">
+                    <div class="upload-icon">📤</div>
+                    <h2>Upload Your Image</h2>
+                    <p>Drag & drop or click to browse</p>
+                    <div class="file-input-wrapper">
+                        <label for="imageFile" class="custom-file-upload">
+                            Choose Image
+                        </label>
+                        <input type="file" id="imageFile" accept="image/*">
+                    </div>
+                </div>
+
+                <div class="preview-area" id="previewArea" style="display: none; margin-top: 30px; position: relative;">
+                    <canvas id="canvas" style="max-width: 100%; border-radius: 15px; cursor: move;"></canvas>
+                    <img id="imagePreview" alt="Preview" style="display: none;">
+                </div>
+
+                <div class="preview-placeholder" id="previewPlaceholder" style="margin-top: 30px;">
+                    <svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="100" cy="100" r="80" stroke="rgba(255,255,255,0.2)" stroke-width="2" stroke-dasharray="5,5"/>
+                        <path d="M100 60V140M60 100H140" stroke="rgba(255,255,255,0.3)" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                    <p style="color: rgba(255,255,255,0.4); margin-top: 20px;">Your image preview will appear here</p>
+                </div>
+            </div>
+
+            <!-- Right: Sidebar -->
+            <div class="sidebar">
+                <h3>✏️ Text Elements</h3>
+                
+                <!-- Add New Text Button -->
+                <button onclick="addNewText()" style="
+                    width: 100%;
+                    padding: 14px;
+                    background: linear-gradient(135deg, #11998e, #38ef7d);
+                    color: white;
+                    border: none;
+                    border-radius: 12px;
+                    font-size: 1rem;
+                    font-weight: 600;
+                    cursor: pointer;
+                    margin-bottom: 20px;
+                    transition: all 0.3s;
+                    box-shadow: 0 4px 15px rgba(17, 153, 142, 0.3);
+                " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(17, 153, 142, 0.5)'"
+                   onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(17, 153, 142, 0.3)'">
+                    ➕ Add New Text
+                </button>
+                
+                <div id="textElements">
+                    <p style="color: rgba(255,255,255,0.5); text-align: center; padding: 40px 20px;">
+                        Upload an image to start editing text
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Style section -->
+        <div class="style-section">
+            <h3>🎨 Create Image Variations</h3>
+            <p style="color: rgba(255,255,255,0.6); font-size: 0.9rem; margin-bottom: 15px; line-height: 1.5;">
+                <strong>Choose your style:</strong><br>
+                • <strong>Leave empty</strong> = Apply effects to your original image<br>
+                • <strong>Add prompt</strong> = AI changes the background (ocean, garden, store, etc.)
+            </p>
+            <textarea id="stylePrompt" placeholder="Optional: Describe background you want (e.g., 'ocean beach sunset', 'modern office', 'garden with flowers', 'city street at night')"></textarea>
+            <div class="prompt-examples">
+                <div class="prompt-tag" onclick="setPrompt('ocean beach sunset background')">🌊 Ocean Beach</div>
+                <div class="prompt-tag" onclick="setPrompt('beautiful garden with flowers')">� Garden</div>
+                <div class="prompt-tag" onclick="setPrompt('modern office interior')">� Office</div>
+                <div class="prompt-tag" onclick="setPrompt('retail store background')">�️ Store</div>
+                <div class="prompt-tag" onclick="setPrompt('city street at night')">🌃 City Night</div>
+                <div class="prompt-tag" onclick="setPrompt('mountain landscape scenery')">⛰️ Mountains</div>
+                <div class="prompt-tag" onclick="setPrompt('')">✨ No Background (Effects Only)</div>
+            </div>
+            
+            <!-- Action buttons -->
+            <div style="display: flex; gap: 10px; margin-top: 15px;">
+                <button class="download-btn" id="downloadBtn" onclick="downloadCurrentImage()" style="
+                    flex: 1;
+                    padding: 18px;
+                    background: linear-gradient(135deg, #11998e, #38ef7d);
+                    color: white;
+                    border: none;
+                    border-radius: 16px;
+                    font-size: 1.1rem;
+                    font-weight: 700;
+                    cursor: pointer;
+                    transition: all 0.4s;
+                    box-shadow: 0 6px 20px rgba(17, 153, 142, 0.4);
+                " onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 10px 30px rgba(17, 153, 142, 0.5)'"
+                   onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 6px 20px rgba(17, 153, 142, 0.4)'">
+                    💾 Download Image
+                </button>
+                
+                <button class="generate-btn" id="generateBtn" onclick="generateVariations()" style="
+                    flex: 1;
+                    padding: 18px;
+                    background: linear-gradient(135deg, #667eea, #764ba2);
+                    color: white;
+                    border: none;
+                    border-radius: 16px;
+                    font-size: 1.1rem;
+                    font-weight: 700;
+                    cursor: pointer;
+                    transition: all 0.4s;
+                    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+                " onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 10px 30px rgba(102, 126, 234, 0.5)'"
+                   onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 6px 20px rgba(102, 126, 234, 0.4)'">
+                    ✨ Generate 3 Variations
+                </button>
+            </div>
+            
+            <!-- MEME GENERATOR SECTION -->
+            <div style="margin-top: 25px; padding-top: 25px; border-top: 2px solid rgba(255,255,255,0.1);">
+                <h4 style="color: white; margin-bottom: 15px; font-size: 1.1rem;">
+                    🎬 Auto Meme Generator
+                </h4>
+                <p style="color: rgba(255,255,255,0.6); font-size: 0.85rem; margin-bottom: 15px;">
+                    AI suggests funny meme captions for your image!
+                </p>
+                
+                <button onclick="generateMemes()" style="
+                    width: 100%;
+                    padding: 15px;
+                    background: linear-gradient(135deg, #f093fb, #f5576c);
+                    color: white;
+                    border: none;
+                    border-radius: 14px;
+                    font-size: 1rem;
+                    font-weight: 700;
+                    cursor: pointer;
+                    transition: all 0.4s;
+                    box-shadow: 0 6px 20px rgba(240, 147, 251, 0.4);
+                    margin-bottom: 15px;
+                " onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 10px 30px rgba(240, 147, 251, 0.5)'"
+                   onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 6px 20px rgba(240, 147, 251, 0.4)'">
+                    🎭 Get Meme Ideas
+                </button>
+                
+                <!-- Meme suggestions will appear here -->
+                <div id="memeSuggestions" style="display: none;">
+                    <div id="memeList"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Update Preview button - HIDDEN (auto-updates now) -->
+        <button class="update-preview-btn" onclick="updatePreview()" style="
+            display: none; /* HIDDEN - Preview updates automatically */
+        </button>
+
+        <!-- Loading -->
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p id="loadingText">Creating variations of your image... ✨</p>
+        </div>
+
+        <!-- Variations -->
+        <div class="variations-section" id="variationsSection" style="display: none; margin-top: 40px;">
+            <h3>✨ Your Image Variations</h3>
+            <div class="variations-grid" id="variationsGrid"></div>
+        </div>
+    </div>
+
+    <script>
+        let uploadedImage = null;
+        let detectedTexts = [];
+        let currentImagePath = null;
+        
+        // Canvas variables
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        let backgroundImage = null;
+        let selectedTextIndex = null;
+        let isDragging = false;
+        let dragStartX = 0;
+        let dragStartY = 0;
+        let canvasScale = 1; // Track scaling factor for coordinate conversion
+
+        // File upload handling
+        document.getElementById('imageFile').addEventListener('change', handleFileUpload);
+
+        // Drag and drop
+        const uploadZone = document.getElementById('uploadZone');
+        uploadZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadZone.style.borderColor = 'rgba(102, 126, 234, 0.8)';
+            uploadZone.style.transform = 'scale(1.02)';
+        });
+
+        uploadZone.addEventListener('dragleave', () => {
+            uploadZone.style.borderColor = 'rgba(102, 126, 234, 0.3)';
+            uploadZone.style.transform = 'scale(1)';
+        });
+
+        uploadZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadZone.style.borderColor = 'rgba(102, 126, 234, 0.3)';
+            uploadZone.style.transform = 'scale(1)';
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                document.getElementById('imageFile').files = files;
+                handleFileUpload({ target: { files } });
+            }
+        });
+
+        async function handleFileUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const formData = new FormData();
+            formData.append('image', file);
+
+            try {
+                const response = await fetch('/api/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+                
+                console.log('Upload response:', data);
+                console.log('Detected texts:', data.detected_texts);
+                
+                if (data.success) {
+                    uploadedImage = data.image_data;
+                    detectedTexts = data.detected_texts;
+                    currentImagePath = data.image_path;
+                    
+                    // Load image for canvas
+                    const img = new Image();
+                    img.onload = function() {
+                        backgroundImage = img;
+                        
+                        // Set canvas size
+                        const maxWidth = 800;
+                        const scale = maxWidth / img.width;
+                        canvasScale = scale; // Store scale factor
+                        
+                        canvas.width = maxWidth;
+                        canvas.height = img.height * scale;
+                        
+                        // Scale text positions to match canvas
+                        detectedTexts.forEach(text => {
+                            text.position.x = Math.round(text.position.x * scale);
+                            text.position.y = Math.round(text.position.y * scale);
+                            text.size = Math.round(text.size * scale);
+                        });
+                        
+                        // Draw canvas
+                        drawCanvas();
+                        
+                        // Show preview
+                        document.getElementById('previewPlaceholder').style.display = 'none';
+                        document.getElementById('previewArea').style.display = 'flex';
+                    };
+                    img.src = data.image_data;
+                    
+                    // Show text elements (after scaling)
+                    setTimeout(() => displayTextElements(detectedTexts), 100);
+                } else {
+                    alert('Error uploading image: ' + data.error);
+                }
+            } catch (error) {
+                alert('Error: ' + error.message);
+            }
+        }
+
+        function displayTextElements(texts) {
+            const container = document.getElementById('textElements');
+            container.innerHTML = '';
+            
+            if (texts.length === 0) {
+                container.innerHTML = '<p style="color: rgba(255,255,255,0.5); text-align: center; padding: 40px 20px;">No text elements. Click "Add New Text" to start!</p>';
+                return;
+            }
+            
+            texts.forEach((text, index) => {
+                const element = document.createElement('div');
+                element.className = 'text-element';
+                
+                // Highlight selected text element
+                if (selectedTextIndex === index) {
+                    element.style.border = '2px solid #667eea';
+                    element.style.background = 'rgba(102, 126, 234, 0.1)';
+                }
+                
+                // Mark placeholder text with different style
+                const isPlaceholder = text.isPlaceholder || false;
+                
+                element.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                        <label>Text ${index + 1} ${selectedTextIndex === index ? '✨ (Selected)' : ''} ${isPlaceholder ? '📝 (Placeholder)' : ''}</label>
+                        <button onclick="deleteText(${index})" style="
+                            background: #e74c3c;
+                            color: white;
+                            border: none;
+                            border-radius: 6px;
+                            padding: 6px 12px;
+                            cursor: pointer;
+                            font-size: 0.9rem;
+                            transition: all 0.3s;
+                        " onmouseover="this.style.background='#c0392b'"
+                           onmouseout="this.style.background='#e74c3c'">
+                            🗑️ Delete
+                        </button>
+                    </div>
+                    <input type="text" value="${text.text}" onchange="updateText(${index}, this.value)" style="margin-bottom: 10px;">
+                    
+                    <label style="margin-top: 10px;">Color</label>
+                    <input type="color" value="${text.color}" onchange="updateColor(${index}, this.value)" 
+                           style="height: 40px; cursor: pointer;">
+                    
+                    <div style="margin-top: 10px; padding: 10px; background: rgba(255,255,255,0.05); border-radius: 8px; font-size: 12px;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                            <span>📍 Position X:</span>
+                            <span><strong>${Math.round(text.position.x)}px</strong></span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                            <span>📍 Position Y:</span>
+                            <span><strong>${Math.round(text.position.y)}px</strong></span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <span>📏 Font Size:</span>
+                            <span><strong>${text.size}px</strong></span>
+                        </div>
+                        <div style="margin-top: 8px; font-size: 11px; opacity: 0.7; text-align: center;">
+                            💡 Click and drag text on the canvas to move it
+                        </div>
+                    </div>
+                `;
+                container.appendChild(element);
+            });
+        }
+
+        function updateText(index, value) {
+            detectedTexts[index].text = value;
+            drawCanvas(); // Redraw canvas with new text
+        }
+
+        function updateColor(index, value) {
+            detectedTexts[index].color = value;
+            drawCanvas(); // Redraw canvas with new color
+        }
+        
+        // Add new text element
+        function addNewText() {
+            if (!backgroundImage) {
+                alert('Please upload an image first!');
+                return;
+            }
+            
+            const newText = {
+                id: detectedTexts.length + 1,
+                text: 'New Text',
+                position: { 
+                    x: Math.round(canvas.width / 2), 
+                    y: Math.round(canvas.height / 2)
+                },
+                font: 'Arial',
+                size: 48,
+                color: '#ffffff',
+                weight: 'bold',
+                isPlaceholder: false
+            };
+            
+            detectedTexts.push(newText);
+            selectedTextIndex = detectedTexts.length - 1; // Auto-select new text
+            
+            drawCanvas();
+            displayTextElements(detectedTexts);
+            
+            console.log('Added new text element:', newText);
+        }
+        
+        // Delete text element
+        function deleteText(index) {
+            if (confirm(`Delete "${detectedTexts[index].text}"?`)) {
+                detectedTexts.splice(index, 1);
+                
+                // Adjust selected index
+                if (selectedTextIndex >= detectedTexts.length) {
+                    selectedTextIndex = detectedTexts.length - 1;
+                }
+                if (detectedTexts.length === 0) {
+                    selectedTextIndex = null;
+                }
+                
+                drawCanvas();
+                displayTextElements(detectedTexts);
+                
+                console.log(`Deleted text element at index ${index}`);
+            }
+        }
+
+        function updatePosition(index, axis, value) {
+            if (axis === 'x') {
+                detectedTexts[index].position.x = parseInt(value);
+                document.getElementById('posX' + index).textContent = value;
+            } else {
+                detectedTexts[index].position.y = parseInt(value);
+                document.getElementById('posY' + index).textContent = value;
+            }
+            drawCanvas(); // Auto-update preview
+        }
+
+        function updateFontSize(index, value) {
+            detectedTexts[index].size = parseInt(value);
+            document.getElementById('fontSize' + index).textContent = value;
+            drawCanvas(); // Auto-update preview
+        }
+
+        async function updatePreview() {
+            if (!uploadedImage || !currentImagePath) {
+                alert('Please upload an image first!');
+                return;
+            }
+
+            // Just redraw the canvas with current text positions
+            drawCanvas();
+            
+            // Optionally, you can still call the backend to generate a downloadable version
+            // but for live preview, the canvas is enough
+        }
+
+        function setPrompt(text) {
+            document.getElementById('stylePrompt').value = text;
+        }
+
+        function downloadCurrentImage() {
+            if (!canvas || !backgroundImage) {
+                alert('Please upload an image first!');
+                return;
+            }
+
+            // Get the current canvas as image data
+            const link = document.createElement('a');
+            const timestamp = new Date().getTime();
+            link.download = `edited-image-${timestamp}.png`;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+            
+            console.log('✅ Image downloaded successfully!');
+        }
+
+        async function generateMemes() {
+            if (!uploadedImage || !currentImagePath) {
+                alert('Please upload an image first!');
+                return;
+            }
+
+            console.log('🎬 Generating meme suggestions...');
+            
+            try {
+                const response = await fetch('/api/generate-memes', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        image_path: currentImagePath
+                    })
+                });
+
+                const result = await response.json();
+                
+                if (result.success && result.captions) {
+                    displayMemeSuggestions(result.captions);
+                } else {
+                    alert('Failed to generate meme suggestions. Try again!');
+                }
+                
+            } catch (error) {
+                console.error('Meme generation error:', error);
+                alert('Error generating memes. Please try again!');
+            }
+        }
+
+        function displayMemeSuggestions(captions) {
+            const container = document.getElementById('memeList');
+            const section = document.getElementById('memeSuggestions');
+            
+            container.innerHTML = '';
+            
+            captions.forEach((caption, index) => {
+                const memeBtn = document.createElement('button');
+                memeBtn.className = 'meme-suggestion';
+                memeBtn.textContent = caption;
+                memeBtn.onclick = () => applyMemeCaption(caption);
+                memeBtn.style.cssText = `
+                    width: 100%;
+                    padding: 12px 15px;
+                    margin-bottom: 8px;
+                    background: rgba(255, 255, 255, 0.05);
+                    border: 1px solid rgba(255, 255, 255, 0.1);
+                    border-radius: 10px;
+                    color: white;
+                    text-align: left;
+                    cursor: pointer;
+                    transition: all 0.3s;
+                    font-size: 0.95rem;
+                `;
+                memeBtn.onmouseover = function() {
+                    this.style.background = 'rgba(240, 147, 251, 0.2)';
+                    this.style.borderColor = 'rgba(240, 147, 251, 0.5)';
+                    this.style.transform = 'translateX(5px)';
+                };
+                memeBtn.onmouseout = function() {
+                    this.style.background = 'rgba(255, 255, 255, 0.05)';
+                    this.style.borderColor = 'rgba(255, 255, 255, 0.1)';
+                    this.style.transform = 'translateX(0)';
+                };
+                
+                container.appendChild(memeBtn);
+            });
+            
+            section.style.display = 'block';
+            console.log('✅ Displayed meme suggestions');
+        }
+
+        function applyMemeCaption(caption) {
+            if (!backgroundImage) {
+                alert('Please upload an image first!');
+                return;
+            }
+            
+            // Check if caption has multiple lines (top/bottom text format)
+            const lines = caption.split('\\n');
+            
+            // Clear existing non-placeholder texts
+            detectedTexts = detectedTexts.filter(t => t.isPlaceholder);
+            
+            if (lines.length > 1) {
+                // Top and bottom text
+                detectedTexts.push({
+                    id: Date.now(),
+                    text: lines[0],
+                    position: { 
+                        x: Math.round(canvas.width / 2), 
+                        y: 60
+                    },
+                    font: 'Arial',
+                    size: 48,
+                    color: '#ffffff',
+                    weight: 'bold',
+                    isPlaceholder: false
+                });
+                
+                detectedTexts.push({
+                    id: Date.now() + 1,
+                    text: lines.slice(1).join(' '),
+                    position: { 
+                        x: Math.round(canvas.width / 2), 
+                        y: canvas.height - 40
+                    },
+                    font: 'Arial',
+                    size: 48,
+                    color: '#ffffff',
+                    weight: 'bold',
+                    isPlaceholder: false
+                });
+            } else {
+                // Single line - center it
+                detectedTexts.push({
+                    id: Date.now(),
+                    text: caption,
+                    position: { 
+                        x: Math.round(canvas.width / 2), 
+                        y: Math.round(canvas.height / 2)
+                    },
+                    font: 'Arial',
+                    size: 56,
+                    color: '#ffffff',
+                    weight: 'bold',
+                    isPlaceholder: false
+                });
+            }
+            
+            drawCanvas();
+            displayTextElements(detectedTexts);
+            
+            console.log('🎭 Applied meme caption:', caption);
+        }
+
+        async function generateVariations() {
+            if (!uploadedImage || !currentImagePath) {
+                alert('Please upload an image first!');
+                return;
+            }
+
+            const stylePrompt = document.getElementById('stylePrompt').value.trim();
+            
+            // Update loading message based on whether AI background is used
+            const loadingText = document.getElementById('loadingText');
+            if (stylePrompt && stylePrompt.length > 3) {
+                loadingText.textContent = `🎨 AI generating new backgrounds: "${stylePrompt}"... (30-60s)`;
+            } else {
+                loadingText.textContent = '✨ Applying effects to your image... (2-3s)';
+            }
+            
+            document.getElementById('loading').classList.add('active');
+            document.getElementById('generateBtn').disabled = true;
+
+            try {
+                const response = await fetch('/api/generate', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        image_path: currentImagePath,  // Pass the uploaded image path
+                        texts: detectedTexts,
+                        style_prompt: stylePrompt
+                    })
+                });
+
+                const data = await response.json();
+                
+                console.log('API Response:', data); // Debug log
+                
+                if (data.success) {
+                    displayVariations(data.variations);
+                } else {
+                    alert('Error generating variations: ' + (data.error || 'Unknown error'));
+                }
+            } catch (error) {
+                console.error('Generation error:', error); // Debug log
+                alert('Error: ' + error.message);
+            } finally {
+                document.getElementById('loading').classList.remove('active');
+                document.getElementById('generateBtn').disabled = false;
+            }
+        }
+
+        function displayVariations(variations) {
+            const grid = document.getElementById('variationsGrid');
+            grid.innerHTML = '';
+            
+            variations.forEach((variation, index) => {
+                const card = document.createElement('div');
+                card.className = 'variation-card';
+                
+                if (variation.error) {
+                    card.innerHTML = `
+                        <h4>${variation.effect || 'Variation ' + (index + 1)}</h4>
+                        <p style="color: rgba(255, 100, 100, 0.9); padding: 20px; text-align: center; line-height: 1.6;">
+                            Generation failed:<br>
+                            <span style="font-size: 0.9em; opacity: 0.8;">${variation.error}</span>
+                        </p>
+                    `;
+                } else {
+                    card.innerHTML = `
+                        <img src="${variation.image_data}" alt="${variation.effect}">
+                        <h4>${variation.effect}</h4>
+                        <p style="font-size: 0.85rem; color: rgba(255,255,255,0.7); margin: 8px 0;">${variation.description}</p>
+                        <button class="download-btn" onclick="downloadImage('${variation.filename}')">
+                            💾 Download
+                        </button>
+                    `;
+                }
+                
+                grid.appendChild(card);
+            });
+            
+            document.getElementById('variationsSection').style.display = 'block';
+        }
+
+        function downloadImage(filename) {
+            window.location.href = `/api/download/${filename}`;
+        }
+
+        // Canvas drawing function
+        function drawCanvas() {
+            if (!ctx) return;
+            
+            // Clear canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw background image
+            if (backgroundImage) {
+                ctx.drawImage(backgroundImage, 0, 0, canvas.width, canvas.height);
+            }
+            
+            console.log(`Drawing ${detectedTexts.length} text elements on canvas`);
+            
+            // Draw all text elements
+            detectedTexts.forEach((textElem, index) => {
+                ctx.font = `${textElem.weight} ${textElem.size}px ${textElem.font}`;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                
+                // MEME-STYLE TEXT: White text with black stroke
+                // Draw black stroke (outline)
+                ctx.strokeStyle = '#000000';
+                ctx.lineWidth = Math.max(3, textElem.size / 15); // Adaptive stroke width
+                ctx.lineJoin = 'round';
+                ctx.miterLimit = 2;
+                ctx.strokeText(textElem.text, textElem.position.x, textElem.position.y);
+                
+                // Draw white fill on top
+                ctx.fillStyle = textElem.color;
+                ctx.fillText(textElem.text, textElem.position.x, textElem.position.y);
+                
+                console.log(`Text ${index + 1}: "${textElem.text}" at (${textElem.position.x}, ${textElem.position.y}) size:${textElem.size}px color:${textElem.color}`);
+                
+                // Highlight selected text
+                if (selectedTextIndex === index) {
+                    ctx.strokeStyle = '#667eea';
+                    ctx.lineWidth = 3;
+                    const metrics = ctx.measureText(textElem.text);
+                    ctx.strokeRect(
+                        textElem.position.x - 5, 
+                        textElem.position.y - textElem.size - 5, 
+                        metrics.width + 10, 
+                        textElem.size + 10
+                    );
+                }
+            });
+        }
+
+        // Mouse event handlers for drag-and-drop
+        canvas.addEventListener('mousedown', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            // Check if click is on any text (reverse order for top-to-bottom selection)
+            for (let i = detectedTexts.length - 1; i >= 0; i--) {
+                const text = detectedTexts[i];
+                ctx.font = `${text.weight} ${text.size}px ${text.font}`;
+                const metrics = ctx.measureText(text.text);
+                
+                // Hit detection
+                if (x >= text.position.x - 5 && 
+                    x <= text.position.x + metrics.width + 5 &&
+                    y >= text.position.y - text.size - 5 && 
+                    y <= text.position.y + 5) {
+                    selectedTextIndex = i;
+                    isDragging = true;
+                    dragStartX = x - text.position.x;
+                    dragStartY = y - text.position.y;
+                    drawCanvas();
+                    displayTextElements(detectedTexts); // Update sidebar
+                    return;
+                }
+            }
+            
+            // Click on empty space - deselect
+            selectedTextIndex = null;
+            drawCanvas();
+        });
+
+        canvas.addEventListener('mousemove', (e) => {
+            if (isDragging && selectedTextIndex !== null) {
+                const rect = canvas.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                // Update text position
+                detectedTexts[selectedTextIndex].position.x = x - dragStartX;
+                detectedTexts[selectedTextIndex].position.y = y - dragStartY;
+                
+                // Redraw canvas
+                drawCanvas();
+            }
+        });
+
+        canvas.addEventListener('mouseup', () => {
+            if (isDragging) {
+                isDragging = false;
+                // Update sidebar to show new position
+                displayTextElements(detectedTexts);
+            }
+        });
+
+        // Stop dragging if mouse leaves canvas
+        canvas.addEventListener('mouseleave', () => {
+            if (isDragging) {
+                isDragging = false;
+            }
+        });
+    </script>
+</body>
+</html>
