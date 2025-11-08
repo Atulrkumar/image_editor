@@ -1,6 +1,6 @@
 """
 AI Image Text Editor - 100% FREE VERSION
-Uses Pollinations.ai - No API keys needed!
+Uses Google Gemini API for AI features
 Features: OCR text extraction, live editing, AI generation
 """
 
@@ -16,6 +16,10 @@ import time
 import easyocr
 import numpy as np
 import google.generativeai as genai
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 app = Flask(__name__)
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max file size
@@ -32,7 +36,11 @@ reader = easyocr.Reader(['en'], gpu=False)
 print("✅ OCR reader ready!")
 
 # Configure Google Gemini API
-GEMINI_API_KEY = os.environ.get('GEMINI_API_KEY', 'AIzaSyARwPmYwTd_k0lyiAcUGvUByabd1jF_vew')
+GEMINI_API_KEY = os.environ.get('GEMINI_API_KEY', '')
+if not GEMINI_API_KEY:
+    print("⚠️ WARNING: GEMINI_API_KEY not found in environment variables!")
+    print("   Add your API key to .env file or set environment variable")
+    print("   Get your key from: https://makersuite.google.com/app/apikey")
 genai.configure(api_key=GEMINI_API_KEY)
 
 # Initialize Gemini models

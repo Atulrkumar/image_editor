@@ -17,11 +17,11 @@ Your AI Image Text Editor now uses **Google Gemini API** instead of Pollinations
    - Applies smart PIL-based transformations (color, contrast, filters)
    - Creates 3 variations: Modern, Vibrant, Minimalist
 
-### API Key Configured:
+### API Key Configuration:
 ```
-GEMINI_API_KEY=AIzaSyARwPmYwTd_k0lyiAcUGvUByabd1jF_vew
+GEMINI_API_KEY=your_api_key_here
 ```
-*(Hardcoded in app with environment variable fallback)*
+*(Set in environment variables or .env file - see Setup section below)*
 
 ---
 
@@ -123,12 +123,12 @@ For production deployment:
 1. **Don't commit API key to GitHub** (already in .gitignore as .env)
 2. **Use environment variable on Render:**
    - Go to Render Dashboard → Your Service → Environment
-   - Add variable: `GEMINI_API_KEY = AIzaSyARwPmYwTd_k0lyiAcUGvUByabd1jF_vew`
+   - Add variable: `GEMINI_API_KEY = your_actual_api_key_here`
    - Redeploy
 
 3. **Create .env file locally:**
 ```bash
-echo "GEMINI_API_KEY=AIzaSyARwPmYwTd_k0lyiAcUGvUByabd1jF_vew" > .env
+echo "GEMINI_API_KEY=your_actual_api_key_here" > .env
 ```
 
 ---

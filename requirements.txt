@@ -5,6 +5,7 @@ flask==3.0.0
 pillow==10.1.0
 requests==2.31.0
 gunicorn==20.1.0
+python-dotenv==1.0.0
 
 # OCR
 easyocr==1.7.0
