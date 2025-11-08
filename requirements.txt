@@ -1,15 +1,18 @@
-# AI Image Text Editor - Full Requirements
-# For Render.com deployment with OCR support
+# AI Image Text Editor - With Gemini AI Integration
+# Full OCR + Google Gemini for AI features
 
 flask==3.0.0
 pillow==10.1.0
 requests==2.31.0
 gunicorn==20.1.0
 
-# OCR and Image Processing
+# OCR
 easyocr==1.7.0
 numpy==1.24.3
 opencv-python-headless==4.8.1.78
 torch==2.0.1
 torchvision==0.15.2
+
+# Google Gemini AI
+google-generativeai==0.3.1
 
