@@ -438,45 +438,24 @@ def generate_variations():
         use_ai_background = bool(style_prompt and len(style_prompt) > 3)
         
         if use_ai_background:
-            print(f"🎨 Creating 3 AI variations with background: '{style_prompt}'...")
+            print(f"🎨 Creating 1 AI variation with background: '{style_prompt}'...")
             
-            # AI-powered background replacement using Pollinations.ai with image reference
-            # We'll create variations by combining the prompt with the image
+            # AI-powered background replacement using Gemini
             effects = [
                 {
-                    'name': f'{style_prompt} - Modern',
-                    'description': f'Modern professional style with {style_prompt} background',
-                    'prompt_suffix': ', modern professional design, high quality, 4k, detailed'
-                },
-                {
-                    'name': f'{style_prompt} - Vibrant', 
-                    'description': f'Vibrant colorful style with {style_prompt} background',
-                    'prompt_suffix': ', vibrant colorful artistic design, beautiful, high quality'
-                },
-                {
-                    'name': f'{style_prompt} - Minimalist',
-                    'description': f'Minimalist clean style with {style_prompt} background',
-                    'prompt_suffix': ', minimalist clean elegant design, simple, high quality'
+                    'name': f'{style_prompt}',
+                    'description': f'AI-edited style with {style_prompt}',
+                    'prompt_suffix': ', high quality, detailed, professional design'
                 }
             ]
         else:
-            print(f"🎨 Creating 3 effect variations of {image_path} with {len(texts)} text elements...")
+            print(f"🎨 Creating 1 effect variation of {image_path} with {len(texts)} text elements...")
             
             # Standard image effects (no AI, just filters)
             effects = [
                 {
-                    'name': 'Enhanced Colors',
-                    'description': 'Vibrant colors with enhanced contrast',
-                    'prompt_suffix': None
-                },
-                {
-                    'name': 'Artistic Filter', 
-                    'description': 'Stylized artistic look with softer tones',
-                    'prompt_suffix': None
-                },
-                {
-                    'name': 'Professional',
-                    'description': 'Clean professional look with subtle adjustments',
+                    'name': 'Enhanced',
+                    'description': 'Enhanced colors with better contrast',
                     'prompt_suffix': None
                 }
             ]

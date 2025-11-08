@@ -902,7 +902,7 @@
                     box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
                 " onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 10px 30px rgba(102, 126, 234, 0.5)'"
                    onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 6px 20px rgba(102, 126, 234, 0.4)'">
-                    ✨ Generate 3 Variations
+                    ✨ Generate Variation
                 </button>
             </div>
             
@@ -948,12 +948,12 @@
         <!-- Loading -->
         <div class="loading" id="loading">
             <div class="spinner"></div>
-            <p id="loadingText">Creating variations of your image... ✨</p>
+            <p id="loadingText">Creating your edited image... ✨</p>
         </div>
 
         <!-- Variations -->
         <div class="variations-section" id="variationsSection" style="display: none; margin-top: 40px;">
-            <h3>✨ Your Image Variations</h3>
+            <h3>✨ Your Edited Image</h3>
             <div class="variations-grid" id="variationsGrid"></div>
         </div>
     </div>
@@ -1774,7 +1774,7 @@
             // Update loading message based on whether AI background is used
             const loadingText = document.getElementById('loadingText');
             if (stylePrompt && stylePrompt.length > 3) {
-                loadingText.textContent = `🎨 AI generating new backgrounds: "${stylePrompt}"... (30-60s)`;
+                loadingText.textContent = `🎨 AI editing image: "${stylePrompt}"... (10-30s)`;
             } else {
                 loadingText.textContent = '✨ Applying effects to your image... (2-3s)';
             }
