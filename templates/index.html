@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PixMoph ✨</title>
     <title>AI Image Text Editor ✨</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -96,7 +95,6 @@
         .header {
             text-align: center;
             margin-bottom: 40px;
-            padding: 32px 40px;
             padding: 80px 40px;
             background: rgba(255, 255, 255, 0.02);
             backdrop-filter: blur(30px);
@@ -124,8 +122,6 @@
         }
 
         .emoji-float {
-            font-size: 2.5rem;
-            margin-bottom: 8px;
             font-size: 4rem;
             margin-bottom: 20px;
             display: inline-block;
@@ -141,15 +137,12 @@
 
         .header h1 {
             font-family: 'Space Grotesk', sans-serif;
-            font-size: 2.5rem;
             font-size: 4.5rem;
             font-weight: 800;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 30%, #f093fb 60%, #4facfe 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            margin-bottom: 8px;
-            letter-spacing: -1.2px;
             margin-bottom: 20px;
             letter-spacing: -3px;
             line-height: 1.1;
@@ -163,11 +156,6 @@
         }
 
         .header .subtitle {
-            font-size: 1rem;
-            color: rgba(255, 255, 255, 0.7);
-            font-weight: 300;
-            letter-spacing: 0.4px;
-            margin-bottom: 6px;
             font-size: 1.4rem;
             color: rgba(255, 255, 255, 0.7);
             font-weight: 300;
@@ -179,11 +167,6 @@
             display: inline-block;
             background: linear-gradient(135deg, #10b981, #059669);
             color: white;
-            padding: 6px 16px;
-            border-radius: 50px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            letter-spacing: 0.2px;
             padding: 8px 24px;
             border-radius: 50px;
             font-size: 0.85rem;
@@ -212,10 +195,6 @@
             backdrop-filter: blur(20px);
             border-radius: 24px;
             border: 2px dashed rgba(102, 126, 234, 0.3);
-            padding: 20px 30px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
             padding: 60px;
             text-align: center;
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
@@ -247,17 +226,6 @@
         }
 
         .upload-icon {
-            font-size: 3rem;
-            margin-right: 20px;
-            animation: float 3s ease-in-out infinite;
-            position: relative;
-            z-index: 1;
-            flex-shrink: 0;
-        }
-
-        .upload-content {
-            flex-grow: 1;
-            text-align: left;
             font-size: 5rem;
             margin-bottom: 30px;
             animation: float 3s ease-in-out infinite;
@@ -267,9 +235,6 @@
 
         .upload-section h2 {
             font-family: 'Space Grotesk', sans-serif;
-            font-size: 1.5rem;
-            color: rgba(255, 255, 255, 0.9);
-            margin-bottom: 5px;
             font-size: 2rem;
             color: rgba(255, 255, 255, 0.9);
             margin-bottom: 15px;
@@ -280,8 +245,6 @@
 
         .upload-section p {
             color: rgba(255, 255, 255, 0.6);
-            font-size: 1rem;
-            margin-bottom: 0;
             font-size: 1.1rem;
             margin-bottom: 30px;
             position: relative;
@@ -292,7 +255,6 @@
             position: relative;
             display: inline-block;
             z-index: 1;
-            flex-shrink: 0;
         }
 
         input[type="file"] {
@@ -301,17 +263,12 @@
 
         .custom-file-upload {
             display: inline-block;
-            padding: 12px 30px;
             padding: 16px 40px;
             background: linear-gradient(135deg, #667eea, #764ba2);
             color: white;
             border-radius: 50px;
             cursor: pointer;
             font-weight: 600;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
-            white-space: nowrap;
             font-size: 1.1rem;
             transition: all 0.3s ease;
             box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
@@ -677,8 +634,6 @@
         <!-- Header -->
         <div class="header">
             <div class="emoji-float">✨🎨🤖</div>
-            <h1>PixMorph</h1>
-            <p class="subtitle">Transform your images with intelligent text editing & AI-powered variations</p>
             <h1>AI Image Text Editor</h1>
             <p class="subtitle">Transform your images with intelligent text editing & AI-powered variations</p>
             <div class="free-badge">100% FREE • No Credit Card Required</div>
@@ -690,10 +645,6 @@
             <div>
                 <div class="upload-section" id="uploadZone">
                     <div class="upload-icon">📤</div>
-                    <div class="upload-content">
-                        <h2>Upload Your Image</h2>
-                        <p>Drag & drop or click to browse</p>
-                    </div>
                     <h2>Upload Your Image</h2>
                     <p>Drag & drop or click to browse</p>
                     <div class="file-input-wrapper">
@@ -720,56 +671,6 @@
 
             <!-- Right: Sidebar -->
             <div class="sidebar">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                    <h3 style="margin: 0;">✏️ Text Elements</h3>
-                    <div style="display: flex; gap: 8px;">
-                        <button id="undoBtn" onclick="undo()" disabled style="
-                            padding: 8px 12px;
-                            background: linear-gradient(135deg, #667eea, #764ba2);
-                            color: white;
-                            border: none;
-                            border-radius: 8px;
-                            font-size: 0.85rem;
-                            font-weight: 600;
-                            cursor: pointer;
-                            transition: all 0.3s;
-                            box-shadow: 0 2px 10px rgba(102, 126, 234, 0.3);
-                        " onmouseover="if(!this.disabled) {this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 15px rgba(102, 126, 234, 0.5)'}"
-                           onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 10px rgba(102, 126, 234, 0.3)'">
-                            ↶ Undo
-                        </button>
-                        <button id="redoBtn" onclick="redo()" disabled style="
-                            padding: 8px 12px;
-                            background: linear-gradient(135deg, #667eea, #764ba2);
-                            color: white;
-                            border: none;
-                            border-radius: 8px;
-                            font-size: 0.85rem;
-                            font-weight: 600;
-                            cursor: pointer;
-                            transition: all 0.3s;
-                            box-shadow: 0 2px 10px rgba(102, 126, 234, 0.3);
-                        " onmouseover="if(!this.disabled) {this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 15px rgba(102, 126, 234, 0.5)'}"
-                           onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 10px rgba(102, 126, 234, 0.3)'">
-                            ↷ Redo
-                        </button>
-                        <button onclick="clearAllTexts()" style="
-                            padding: 8px 16px;
-                            background: linear-gradient(135deg, #e74c3c, #c0392b);
-                            color: white;
-                            border: none;
-                            border-radius: 8px;
-                            font-size: 0.85rem;
-                            font-weight: 600;
-                            cursor: pointer;
-                            transition: all 0.3s;
-                            box-shadow: 0 2px 10px rgba(231, 76, 60, 0.3);
-                        " onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 15px rgba(231, 76, 60, 0.5)'"
-                           onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 10px rgba(231, 76, 60, 0.3)'">
-                            🗑️ Clear All
-                        </button>
-                    </div>
-                </div>
                 <h3>✏️ Text Elements</h3>
                 
                 <!-- Add New Text Button -->
@@ -912,11 +813,6 @@
         let detectedTexts = [];
         let currentImagePath = null;
         
-        // Undo/Redo history
-        let historyStack = [];
-        let historyIndex = -1;
-        const MAX_HISTORY = 50;
-        
         // Canvas variables
         const canvas = document.getElementById('canvas');
         const ctx = canvas.getContext('2d');
@@ -995,17 +891,6 @@
                             text.position.x = Math.round(text.position.x * scale);
                             text.position.y = Math.round(text.position.y * scale);
                             text.size = Math.round(text.size * scale);
-                            // Initialize rotation if not present
-                            if (text.rotation === undefined) {
-                                text.rotation = 0;
-                            }
-                        });
-                        
-                        // Initialize history with the loaded state
-                        historyStack = [JSON.parse(JSON.stringify(detectedTexts))];
-                        historyIndex = 0;
-                        updateUndoRedoButtons();
-                        
                         });
                         
                         // Draw canvas
@@ -1066,145 +951,11 @@
                             🗑️ Delete
                         </button>
                     </div>
-                    <label>Text Content</label>
-                    <textarea 
-                        onchange="updateText(${index}, this.value)" 
-                        onkeyup="updateText(${index}, this.value)"
-                        style="
-                            margin-bottom: 10px; 
-                            min-height: 80px; 
-                            resize: vertical;
-                            font-family: monospace;
-                        "
-                        placeholder="Type your text here (press Enter for new line)"
-                    >${text.text}</textarea>
-                    
-                    <label style="margin-top: 10px;">Font Family</label>
-                    <select onchange="updateFont(${index}, this.value)" style="
-                        width: 100%;
-                        background: rgba(0, 0, 0, 0.3);
-                        border: 1px solid rgba(255, 255, 255, 0.1);
-                        border-radius: 10px;
-                        padding: 12px 16px;
-                        color: white;
-                        font-size: 1rem;
-                        margin-bottom: 10px;
-                        cursor: pointer;
-                    ">
-                        <optgroup label="MEME FONTS" style="font-weight: bold; background: rgba(102, 126, 234, 0.2);">
-                            <option value="Impact" ${text.font === 'Impact' ? 'selected' : ''}>Impact (Classic Meme)</option>
-                            <option value="Arial Black" ${text.font === 'Arial Black' ? 'selected' : ''}>Arial Black (Bold)</option>
-                            <option value="Comic Sans MS" ${text.font === 'Comic Sans MS' ? 'selected' : ''}>Comic Sans MS (Fun)</option>
-                        </optgroup>
-                        <optgroup label="SANS SERIF" style="font-weight: bold;">
-                            <option value="Arial" ${text.font === 'Arial' ? 'selected' : ''}>Arial</option>
-                            <option value="Helvetica" ${text.font === 'Helvetica' ? 'selected' : ''}>Helvetica</option>
-                            <option value="Verdana" ${text.font === 'Verdana' ? 'selected' : ''}>Verdana</option>
-                            <option value="Trebuchet MS" ${text.font === 'Trebuchet MS' ? 'selected' : ''}>Trebuchet MS</option>
-                            <option value="Tahoma" ${text.font === 'Tahoma' ? 'selected' : ''}>Tahoma</option>
-                            <option value="Calibri" ${text.font === 'Calibri' ? 'selected' : ''}>Calibri</option>
-                            <option value="Segoe UI" ${text.font === 'Segoe UI' ? 'selected' : ''}>Segoe UI</option>
-                        </optgroup>
-                        <optgroup label="SERIF" style="font-weight: bold;">
-                            <option value="Times New Roman" ${text.font === 'Times New Roman' ? 'selected' : ''}>Times New Roman</option>
-                            <option value="Georgia" ${text.font === 'Georgia' ? 'selected' : ''}>Georgia</option>
-                            <option value="Palatino" ${text.font === 'Palatino' ? 'selected' : ''}>Palatino</option>
-                            <option value="Book Antiqua" ${text.font === 'Book Antiqua' ? 'selected' : ''}>Book Antiqua</option>
-                            <option value="Garamond" ${text.font === 'Garamond' ? 'selected' : ''}>Garamond</option>
-                        </optgroup>
-                        <optgroup label="MONOSPACE" style="font-weight: bold;">
-                            <option value="Courier New" ${text.font === 'Courier New' ? 'selected' : ''}>Courier New</option>
-                            <option value="Consolas" ${text.font === 'Consolas' ? 'selected' : ''}>Consolas</option>
-                            <option value="Monaco" ${text.font === 'Monaco' ? 'selected' : ''}>Monaco</option>
-                            <option value="Lucida Console" ${text.font === 'Lucida Console' ? 'selected' : ''}>Lucida Console</option>
-                        </optgroup>
-                        <optgroup label="DECORATIVE" style="font-weight: bold;">
-                            <option value="Brush Script MT" ${text.font === 'Brush Script MT' ? 'selected' : ''}>Brush Script MT</option>
-                            <option value="Papyrus" ${text.font === 'Papyrus' ? 'selected' : ''}>Papyrus</option>
-                            <option value="Copperplate" ${text.font === 'Copperplate' ? 'selected' : ''}>Copperplate</option>
-                            <option value="Luminari" ${text.font === 'Luminari' ? 'selected' : ''}>Luminari</option>
-                        </optgroup>
-                    </select>
-                    
-                    <label style="margin-top: 10px;">Font Size: <span id="fontSize${index}" style="color: #667eea; font-weight: 700;">${text.size}px</span></label>
-                    
-                    <!-- Quick size buttons -->
-                    <div style="display: flex; gap: 5px; margin-bottom: 8px; flex-wrap: wrap;">
-                        <button onclick="setFontSize(${index}, 24)" style="flex: 1; padding: 6px; background: rgba(102, 126, 234, 0.2); color: white; border: 1px solid rgba(102, 126, 234, 0.3); border-radius: 6px; cursor: pointer; font-size: 0.8rem;">Small</button>
-                        <button onclick="setFontSize(${index}, 48)" style="flex: 1; padding: 6px; background: rgba(102, 126, 234, 0.2); color: white; border: 1px solid rgba(102, 126, 234, 0.3); border-radius: 6px; cursor: pointer; font-size: 0.8rem;">Medium</button>
-                        <button onclick="setFontSize(${index}, 72)" style="flex: 1; padding: 6px; background: rgba(102, 126, 234, 0.2); color: white; border: 1px solid rgba(102, 126, 234, 0.3); border-radius: 6px; cursor: pointer; font-size: 0.8rem;">Large</button>
-                        <button onclick="setFontSize(${index}, 120)" style="flex: 1; padding: 6px; background: rgba(102, 126, 234, 0.2); color: white; border: 1px solid rgba(102, 126, 234, 0.3); border-radius: 6px; cursor: pointer; font-size: 0.8rem;">Huge</button>
-                    </div>
-                    
-                    <input type="range" min="12" max="200" value="${text.size}" 
-                           id="sizeSlider${index}"
-                           oninput="updateFontSize(${index}, this.value)"
-                           style="
-                               width: 100%; 
-                               height: 8px;
-                               cursor: pointer; 
-                               margin-bottom: 15px;
-                               background: rgba(102, 126, 234, 0.2);
-                               border-radius: 10px;
-                               outline: none;
-                               -webkit-appearance: none;
-                           ">
-                    <style>
-                        input[type='range']::-webkit-slider-thumb {
-                            -webkit-appearance: none;
-                            appearance: none;
-                            width: 20px;
-                            height: 20px;
-                            border-radius: 50%;
-                            background: linear-gradient(135deg, #667eea, #764ba2);
-                            cursor: pointer;
-                            box-shadow: 0 0 10px rgba(102, 126, 234, 0.5);
-                        }
-                        input[type='range']::-moz-range-thumb {
-                            width: 20px;
-                            height: 20px;
-                            border-radius: 50%;
-                            background: linear-gradient(135deg, #667eea, #764ba2);
-                            cursor: pointer;
-                            border: none;
-                            box-shadow: 0 0 10px rgba(102, 126, 234, 0.5);
-                        }
-                        input[type='range']:hover::-webkit-slider-thumb {
-                            box-shadow: 0 0 15px rgba(102, 126, 234, 0.8);
-                        }
-                        input[type='range']:hover::-moz-range-thumb {
-                            box-shadow: 0 0 15px rgba(102, 126, 234, 0.8);
-                        }
-                    </style>
                     <input type="text" value="${text.text}" onchange="updateText(${index}, this.value)" style="margin-bottom: 10px;">
                     
                     <label style="margin-top: 10px;">Color</label>
                     <input type="color" value="${text.color}" onchange="updateColor(${index}, this.value)" 
                            style="height: 40px; cursor: pointer;">
-                    
-                    <label style="margin-top: 10px;">Rotation: <span id="rotation${index}" style="color: #667eea; font-weight: 700;">${text.rotation || 0}°</span></label>
-                    
-                    <!-- Quick rotation buttons -->
-                    <div style="display: flex; gap: 5px; margin-bottom: 8px; flex-wrap: wrap;">
-                        <button onclick="setRotation(${index}, 0)" style="flex: 1; padding: 6px; background: rgba(102, 126, 234, 0.2); color: white; border: 1px solid rgba(102, 126, 234, 0.3); border-radius: 6px; cursor: pointer; font-size: 0.8rem;">0°</button>
-                        <button onclick="setRotation(${index}, 45)" style="flex: 1; padding: 6px; background: rgba(102, 126, 234, 0.2); color: white; border: 1px solid rgba(102, 126, 234, 0.3); border-radius: 6px; cursor: pointer; font-size: 0.8rem;">45°</button>
-                        <button onclick="setRotation(${index}, 90)" style="flex: 1; padding: 6px; background: rgba(102, 126, 234, 0.2); color: white; border: 1px solid rgba(102, 126, 234, 0.3); border-radius: 6px; cursor: pointer; font-size: 0.8rem;">90°</button>
-                        <button onclick="setRotation(${index}, -45)" style="flex: 1; padding: 6px; background: rgba(102, 126, 234, 0.2); color: white; border: 1px solid rgba(102, 126, 234, 0.3); border-radius: 6px; cursor: pointer; font-size: 0.8rem;">-45°</button>
-                    </div>
-                    
-                    <input type="range" min="-180" max="180" value="${text.rotation || 0}" 
-                           id="rotationSlider${index}"
-                           oninput="updateRotation(${index}, this.value)"
-                           style="
-                               width: 100%; 
-                               height: 8px;
-                               cursor: pointer; 
-                               margin-bottom: 15px;
-                               background: rgba(102, 126, 234, 0.2);
-                               border-radius: 10px;
-                               outline: none;
-                               -webkit-appearance: none;
-                           ">
                     
                     <div style="margin-top: 10px; padding: 10px; background: rgba(255,255,255,0.05); border-radius: 8px; font-size: 12px;">
                         <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
@@ -1212,9 +963,6 @@
                             <span><strong>${Math.round(text.position.x)}px</strong></span>
                         </div>
                         <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
-                            <span>� Position Y:</span>
-                            <span><strong>${Math.round(text.position.y)}px</strong></span>
-                        </div>
                             <span>📍 Position Y:</span>
                             <span><strong>${Math.round(text.position.y)}px</strong></span>
                         </div>
@@ -1233,90 +981,11 @@
 
         function updateText(index, value) {
             detectedTexts[index].text = value;
-            saveHistory(); // Save to undo stack
             drawCanvas(); // Redraw canvas with new text
         }
 
         function updateColor(index, value) {
             detectedTexts[index].color = value;
-            saveHistory(); // Save to undo stack
-            drawCanvas(); // Redraw canvas with new color
-        }
-
-        function updateFont(index, value) {
-            detectedTexts[index].font = value;
-            saveHistory(); // Save to undo stack
-            drawCanvas(); // Redraw canvas with new font
-            console.log(`Updated font to ${value} for text ${index + 1}`);
-        }
-
-        function updateFontSize(index, value) {
-            const size = parseInt(value);
-            detectedTexts[index].size = size;
-            
-            // Update the display
-            const fontSizeLabel = document.getElementById('fontSize' + index);
-            if (fontSizeLabel) {
-                fontSizeLabel.textContent = size + 'px';
-            }
-            
-            saveHistory(); // Save to undo stack
-            drawCanvas(); // Redraw canvas with new size
-            console.log(`Updated font size to ${size}px for text ${index + 1}`);
-        }
-
-        function setFontSize(index, size) {
-            detectedTexts[index].size = size;
-            
-            // Update both the label and slider
-            const fontSizeLabel = document.getElementById('fontSize' + index);
-            const slider = document.getElementById('sizeSlider' + index);
-            
-            if (fontSizeLabel) {
-                fontSizeLabel.textContent = size + 'px';
-            }
-            if (slider) {
-                slider.value = size;
-            }
-            
-            saveHistory(); // Save to undo stack
-            drawCanvas(); // Redraw canvas
-            console.log(`Set font size to ${size}px for text ${index + 1}`);
-        }
-
-        function updateRotation(index, value) {
-            const angle = parseInt(value);
-            detectedTexts[index].rotation = angle;
-            
-            // Update the display
-            const rotationLabel = document.getElementById('rotation' + index);
-            if (rotationLabel) {
-                rotationLabel.textContent = angle + '°';
-            }
-            
-            saveHistory(); // Save to undo stack
-            drawCanvas(); // Redraw canvas with new rotation
-            console.log(`Updated rotation to ${angle}° for text ${index + 1}`);
-        }
-
-        function setRotation(index, angle) {
-            detectedTexts[index].rotation = angle;
-            
-            // Update both the label and slider
-            const rotationLabel = document.getElementById('rotation' + index);
-            const slider = document.getElementById('rotationSlider' + index);
-            
-            if (rotationLabel) {
-                rotationLabel.textContent = angle + '°';
-            }
-            if (slider) {
-                slider.value = angle;
-            }
-            
-            saveHistory(); // Save to undo stack
-            drawCanvas(); // Redraw canvas
-            console.log(`Set rotation to ${angle}° for text ${index + 1}`);
-        }
             drawCanvas(); // Redraw canvas with new color
         }
         
@@ -1338,14 +1007,12 @@
                 size: 48,
                 color: '#ffffff',
                 weight: 'bold',
-                rotation: 0,
                 isPlaceholder: false
             };
             
             detectedTexts.push(newText);
             selectedTextIndex = detectedTexts.length - 1; // Auto-select new text
             
-            saveHistory(); // Save to undo stack
             drawCanvas();
             displayTextElements(detectedTexts);
             
@@ -1354,108 +1021,6 @@
         
         // Delete text element
         function deleteText(index) {
-            // Remove confirmation dialog - just delete directly
-            detectedTexts.splice(index, 1);
-            
-            // Adjust selected index
-            if (selectedTextIndex >= detectedTexts.length) {
-                selectedTextIndex = detectedTexts.length - 1;
-            }
-            if (detectedTexts.length === 0) {
-                selectedTextIndex = null;
-            }
-            
-            saveHistory(); // Save to undo stack
-            drawCanvas();
-            displayTextElements(detectedTexts);
-            
-            console.log(`Deleted text element at index ${index}`);
-        }
-
-        // Clear all text elements
-        function clearAllTexts() {
-            detectedTexts = [];
-            selectedTextIndex = null;
-            saveHistory(); // Save to undo stack
-            drawCanvas();
-            displayTextElements(detectedTexts);
-            console.log('Cleared all text elements');
-        }
-
-        // Undo/Redo functionality
-        function saveHistory() {
-            // Remove any future history if we're not at the end
-            if (historyIndex < historyStack.length - 1) {
-                historyStack = historyStack.slice(0, historyIndex + 1);
-            }
-            
-            // Save current state
-            historyStack.push(JSON.parse(JSON.stringify(detectedTexts)));
-            
-            // Limit history size
-            if (historyStack.length > MAX_HISTORY) {
-                historyStack.shift();
-            } else {
-                historyIndex++;
-            }
-            
-            updateUndoRedoButtons();
-        }
-
-        function undo() {
-            if (historyIndex > 0) {
-                historyIndex--;
-                detectedTexts = JSON.parse(JSON.stringify(historyStack[historyIndex]));
-                drawCanvas();
-                displayTextElements(detectedTexts);
-                updateUndoRedoButtons();
-                console.log('Undo - Step back to history index:', historyIndex);
-            }
-        }
-
-        function redo() {
-            if (historyIndex < historyStack.length - 1) {
-                historyIndex++;
-                detectedTexts = JSON.parse(JSON.stringify(historyStack[historyIndex]));
-                drawCanvas();
-                displayTextElements(detectedTexts);
-                updateUndoRedoButtons();
-                console.log('Redo - Step forward to history index:', historyIndex);
-            }
-        }
-
-        function updateUndoRedoButtons() {
-            const undoBtn = document.getElementById('undoBtn');
-            const redoBtn = document.getElementById('redoBtn');
-            
-            if (undoBtn) {
-                undoBtn.disabled = historyIndex <= 0;
-                undoBtn.style.opacity = historyIndex <= 0 ? '0.5' : '1';
-                undoBtn.style.cursor = historyIndex <= 0 ? 'not-allowed' : 'pointer';
-            }
-            
-            if (redoBtn) {
-                redoBtn.disabled = historyIndex >= historyStack.length - 1;
-                redoBtn.style.opacity = historyIndex >= historyStack.length - 1 ? '0.5' : '1';
-                redoBtn.style.cursor = historyIndex >= historyStack.length - 1 ? 'not-allowed' : 'pointer';
-            }
-        }
-
-        // Keyboard shortcuts for undo/redo
-        document.addEventListener('keydown', (e) => {
-            // Ctrl+Z or Cmd+Z for undo
-            if ((e.ctrlKey || e.metaKey) && e.key === 'z' && !e.shiftKey) {
-                e.preventDefault();
-                undo();
-            }
-            // Ctrl+Shift+Z or Cmd+Shift+Z or Ctrl+Y for redo
-            if (((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'z') || 
-                (e.ctrlKey && e.key === 'y')) {
-                e.preventDefault();
-                redo();
-            }
-        });
-
             if (confirm(`Delete "${detectedTexts[index].text}"?`)) {
                 detectedTexts.splice(index, 1);
                 
@@ -1624,7 +1189,6 @@
                     size: 48,
                     color: '#ffffff',
                     weight: 'bold',
-                    rotation: 0,
                     isPlaceholder: false
                 });
                 
@@ -1639,7 +1203,6 @@
                     size: 48,
                     color: '#ffffff',
                     weight: 'bold',
-                    rotation: 0,
                     isPlaceholder: false
                 });
             } else {
@@ -1655,12 +1218,10 @@
                     size: 56,
                     color: '#ffffff',
                     weight: 'bold',
-                    rotation: 0,
                     isPlaceholder: false
                 });
             }
             
-            saveHistory(); // Save meme caption to undo stack
             drawCanvas();
             displayTextElements(detectedTexts);
             
@@ -1770,97 +1331,16 @@
             
             // Draw all text elements
             detectedTexts.forEach((textElem, index) => {
-                // Save canvas state before rotation
-                ctx.save();
-                
-                // Apply rotation if set
-                const rotation = textElem.rotation || 0;
-                if (rotation !== 0) {
-                    // Translate to text position, rotate, then translate back
-                    ctx.translate(textElem.position.x, textElem.position.y);
-                    ctx.rotate(rotation * Math.PI / 180); // Convert degrees to radians
-                    ctx.translate(-textElem.position.x, -textElem.position.y);
-                }
-                
                 ctx.font = `${textElem.weight} ${textElem.size}px ${textElem.font}`;
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'middle';
                 
-                // Split text by newlines for multi-line support
-                const lines = textElem.text.split('\n');
-                const lineHeight = textElem.size * 1.2; // 120% of font size for line spacing
-                
-                // Calculate total text block height
-                const totalHeight = lines.length * lineHeight;
-                
-                // Starting Y position (centered vertically around textElem.position.y)
-                const startY = textElem.position.y - (totalHeight / 2) + (lineHeight / 2);
-                
-                // MEME-STYLE TEXT: White text with black stroke
                 // MEME-STYLE TEXT: White text with black stroke
                 // Draw black stroke (outline)
                 ctx.strokeStyle = '#000000';
                 ctx.lineWidth = Math.max(3, textElem.size / 15); // Adaptive stroke width
                 ctx.lineJoin = 'round';
                 ctx.miterLimit = 2;
-                ctx.fillStyle = textElem.color;
-                
-                // Draw each line
-                lines.forEach((line, lineIndex) => {
-                    const yPos = startY + (lineIndex * lineHeight);
-                    
-                    // Draw black stroke (outline)
-                    ctx.strokeText(line, textElem.position.x, yPos);
-                    
-                    // Draw white fill on top
-                    ctx.fillText(line, textElem.position.x, yPos);
-                });
-                
-                console.log(`Text ${index + 1}: "${textElem.text.substring(0, 20)}${textElem.text.length > 20 ? '...' : ''}" (${lines.length} lines) at (${textElem.position.x}, ${textElem.position.y}) rotation:${rotation}° size:${textElem.size}px color:${textElem.color}`);
-                
-                // Restore canvas state after rotation
-                ctx.restore();
-                
-                // Highlight selected text with ACCURATE bounding box (drawn without rotation for clarity)
-                if (selectedTextIndex === index) {
-                    // Calculate bounding box for all lines
-                    let maxWidth = 0;
-                    lines.forEach(line => {
-                        const metrics = ctx.measureText(line);
-                        maxWidth = Math.max(maxWidth, metrics.width);
-                    });
-                    
-                    // Get accurate text metrics from first line (for ascent/descent)
-                    const metrics = ctx.measureText(lines[0] || 'M');
-                    const ascent = metrics.actualBoundingBoxAscent || textElem.size * 0.8;
-                    const descent = metrics.actualBoundingBoxDescent || textElem.size * 0.2;
-                    
-                    // Since textAlign='center' and textBaseline='middle':
-                    // - X: text is centered at position.x, so box starts at x - width/2
-                    // - Y: text block is centered around position.y
-                    const boxX = textElem.position.x - maxWidth / 2;
-                    const boxY = startY - ascent;
-                    const boxWidth = maxWidth;
-                    const boxHeight = totalHeight + descent;
-                    
-                    // Draw bounding box with small padding
-                    const padding = 5;
-                    ctx.strokeStyle = '#667eea';
-                    ctx.lineWidth = 3;
-                    ctx.strokeRect(
-                        boxX - padding,
-                        boxY - padding,
-                        boxWidth + padding * 2,
-                        boxHeight + padding * 2
-                    );
-                    
-                    // Optional: Draw baseline indicator for debugging
-                    // ctx.strokeStyle = '#ff0000';
-                    // ctx.lineWidth = 1;
-                    // ctx.beginPath();
-                    // ctx.moveTo(boxX, textElem.position.y);
-                    // ctx.lineTo(boxX + boxWidth, textElem.position.y);
-                    // ctx.stroke();
                 ctx.strokeText(textElem.text, textElem.position.x, textElem.position.y);
                 
                 // Draw white fill on top
@@ -1894,40 +1374,6 @@
             for (let i = detectedTexts.length - 1; i >= 0; i--) {
                 const text = detectedTexts[i];
                 ctx.font = `${text.weight} ${text.size}px ${text.font}`;
-                
-                // Split text by newlines for multi-line support
-                const lines = text.text.split('\n');
-                const lineHeight = text.size * 1.2;
-                const totalHeight = lines.length * lineHeight;
-                
-                // Calculate bounding box for all lines
-                let maxWidth = 0;
-                lines.forEach(line => {
-                    const metrics = ctx.measureText(line);
-                    maxWidth = Math.max(maxWidth, metrics.width);
-                });
-                
-                // Get accurate text metrics
-                const metrics = ctx.measureText(lines[0] || 'M');
-                const ascent = metrics.actualBoundingBoxAscent || text.size * 0.8;
-                const descent = metrics.actualBoundingBoxDescent || text.size * 0.2;
-                
-                // Starting Y position (centered vertically around text.position.y)
-                const startY = text.position.y - (totalHeight / 2) + (lineHeight / 2);
-                
-                // Box coordinates (accounting for center alignment and middle baseline)
-                const boxX = text.position.x - maxWidth / 2;
-                const boxY = startY - ascent;
-                const boxWidth = maxWidth;
-                const boxHeight = totalHeight + descent;
-                
-                const padding = 5;
-                
-                // Hit detection using accurate bounding box
-                if (x >= boxX - padding && 
-                    x <= boxX + boxWidth + padding &&
-                    y >= boxY - padding && 
-                    y <= boxY + boxHeight + padding) {
                 const metrics = ctx.measureText(text.text);
                 
                 // Hit detection
@@ -1968,7 +1414,6 @@
         canvas.addEventListener('mouseup', () => {
             if (isDragging) {
                 isDragging = false;
-                saveHistory(); // Save position change to undo stack
                 // Update sidebar to show new position
                 displayTextElements(detectedTexts);
             }
@@ -1978,7 +1423,6 @@
         canvas.addEventListener('mouseleave', () => {
             if (isDragging) {
                 isDragging = false;
-                saveHistory(); // Save position change to undo stack
             }
         });
     </script>
