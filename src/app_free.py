@@ -280,6 +280,14 @@ POV: You just realized"""
 def index():
     return render_template('index.html')
 
+@app.route('/video')
+def video_editor():
+    return render_template('video.html')
+
+@app.route('/docs')
+def docs_editor():
+    return render_template('docs.html')
+
 @app.route('/api/upload', methods=['POST'])
 def upload_image():
     """Upload and process image - extract text using simple pattern detection"""
