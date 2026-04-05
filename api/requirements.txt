@@ -1,0 +1,5 @@
+# Vercel Python Dependencies (minimal for serverless)
+flask==3.0.0
+pillow==10.1.0
+requests==2.31.0
+numpy>=1.24.0

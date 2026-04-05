@@ -15,6 +15,8 @@ instance/
 # User uploads and generated images (temporary)
 uploads/
 generated/
+src/uploads/
+src/generated/
 
 # Environment variables
 .env
@@ -31,3 +33,6 @@ Thumbs.db
 
 # Logs
 *.log
+
+# Vercel
+.vercel

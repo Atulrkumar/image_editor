@@ -1,0 +1,15 @@
+# AI Image Text Editor - Full Requirements (Local Development)
+# Includes OCR support - works locally, graceful fallback in serverless
+
+flask==3.0.0
+pillow==10.1.0
+requests==2.31.0
+python-dotenv==1.0.0
+numpy>=1.24.0
+
+# OCR (works locally, may not work in serverless)
+easyocr>=1.7.0
+opencv-python-headless>=4.8.0
+
+# Optional: For local server
+gunicorn==21.2.0
